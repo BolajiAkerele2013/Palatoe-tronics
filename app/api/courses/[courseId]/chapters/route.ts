@@ -9,7 +9,7 @@ export async function POST(
     try {
         const { userId } = await auth();
         const { title } = await req.json();
-        const { courseId } = await params;
+        const resolvedParams = await params; 
 
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 });
@@ -17,7 +17,7 @@ export async function POST(
 
         const courseOwner = await db.course.findUnique({
             where: {
-                id: courseId,
+                id: resolvedParams.courseId,
                     userId: userId,
                 }
             });
@@ -28,7 +28,7 @@ export async function POST(
 
         const lastChapter = await db.chapter.findFirst ({
             where: {
-                courseId: params.courseId,
+                courseId: resolvedParams.courseId,
             },
             orderBy: {
                 position: "desc"
@@ -40,7 +40,7 @@ export async function POST(
         const chapter = await db.chapter.create({
             data: {
                 title,
-                courseId: params.courseId,
+                courseId: resolvedParams.courseId,
                 position: newPosition,
             }
         });

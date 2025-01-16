@@ -9,6 +9,7 @@ export async function DELETE(
 ) {
     try {
         const { userId } = await auth();
+        const resolvedParams = await params; 
 
         if (!userId) {
             return new NextResponse ("Unauthorized", { status: 401 });
@@ -16,7 +17,7 @@ export async function DELETE(
 
         const courseOwner = await db.course.findUnique({
             where: {
-                id:params.courseId,
+                id:resolvedParams.courseId,
                 userId: userId,
             }
         });
@@ -27,8 +28,8 @@ export async function DELETE(
 
         const attachment = await db.attachment.delete({
             where: {
-                courseId: params.courseId,
-                id: params.attachmentId,
+                courseId: resolvedParams.courseId,
+                id: resolvedParams.attachmentId,
             }
         });
 

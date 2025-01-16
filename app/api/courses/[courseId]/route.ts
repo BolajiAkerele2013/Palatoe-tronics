@@ -14,7 +14,7 @@ export async function DELETE(
 ) {
     try {
         const { userId } =  await auth();
-        const { courseId } = await params;
+        const resolvedParams = await params; 
 
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 });
@@ -22,7 +22,7 @@ export async function DELETE(
 
         const course = await db.course.findUnique({
             where: {
-                id: courseId,
+                id: resolvedParams.courseId,
                     userId: userId,
                 },
                 include: {
@@ -46,7 +46,7 @@ export async function DELETE(
 
         const deletedCourse = await db.course.delete({
             where: {
-                id: courseId
+                id: resolvedParams.courseId
             },
         });
 
@@ -63,7 +63,7 @@ export async function PATCH (
 ) {
     try {
         const { userId } = await auth();
-        const { courseId } = await params;
+        const resolvedParams = await params; 
         const values = await req.json();
 
         if (!userId) {
@@ -73,8 +73,7 @@ export async function PATCH (
 
         const course = await db.course.update({
             where: {
-                //id: params.courseId,
-                id: courseId,
+                id: resolvedParams.courseId,
                 userId
             },
             data: {
