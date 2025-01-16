@@ -6,21 +6,24 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
 
-interface SearchPageProps {
-    fSearchParams: {
-        title: string;
-        categoryId: string;
-    }
-};
+// interface SearchPageProps {
+//     fSearchParams: {
+//         title: string;
+//         categoryId: string;
+//     }
+// };
 
-const SearchPage = async ({
+const SearchPage = async ({ 
     fSearchParams
-}: SearchPageProps) => {
+}: { fSearchParams: { title?: string; categoryId?: string } }) => {
     const { userId } = await auth();
 
     if (!userId) {
         return redirect("/");
     }
+
+    // Extract `title` and `categoryId` from searchParams with defaults
+    const { title = "", categoryId = "" } = fSearchParams || {};
 
     const categories = await db.category.findMany({
         orderBy: {
@@ -30,6 +33,8 @@ const SearchPage = async ({
 
     const courses = await GetCourses({
         userId,
+        title,
+        categoryId,
     });
 
     return ( 
