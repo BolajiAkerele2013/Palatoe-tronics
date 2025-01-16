@@ -13,7 +13,7 @@ interface SearchPageProps {
     }
 };
 
-const SearchPage = async ({
+export const SearchPage = async ({
     fSearchParams
 }: SearchPageProps) => {
     const { userId } = await auth();
@@ -48,4 +48,4 @@ const SearchPage = async ({
      );
 };
  
-export default SearchPage;
+//export default SearchPage;
