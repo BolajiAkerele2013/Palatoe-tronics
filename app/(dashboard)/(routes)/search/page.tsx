@@ -1,22 +1,24 @@
-// import { db } from "@/lib/db";
-// import { Categories } from "./_components/categories";
-// import { SearchInput } from "@/components/search-input";
-// import { GetCourses } from "@/actions/get-courses";
-// import { auth } from "@clerk/nextjs/server";
-// import { redirect } from "next/navigation";
-// import { CoursesList } from "@/components/courses-list";
+import { db } from "@/lib/db";
+import { Categories } from "./_components/categories";
+import { SearchInput } from "@/components/search-input";
+import { GetCourses } from "@/actions/get-courses";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { CoursesList } from "@/components/courses-list";
 
-// const SearchPage = async ({
+const SearchPage = async (
+    // {
 //   searchParams,
 // }: {
 //   searchParams: { title?: string; categoryId?: string };
-// }) => {
-//   const { userId } = await auth();
+// }
+) => {
+  const { userId } = await auth();
 
-//   // Redirect if no user is authenticated
-//   if (!userId) {
-//     return redirect("/");
-//   }
+  // Redirect if no user is authenticated
+  if (!userId) {
+    return redirect("/");
+  }
 
 //   // Extract `title` and `categoryId` from searchParams with defaults
 //   const { title = "", categoryId = "" } = searchParams || {};
@@ -35,17 +37,16 @@
 //     categoryId,
 //   });
 
-//   return (
-//     <>
-//       <div className="px-6 pt-6 md:hidden md:mb-0 block">
-//         <SearchInput />
-//       </div>
-//       <div className="p-6 space-y-4">
-//         <Categories items={categories} />
-//         <CoursesList items={courses} />
-//       </div>
-//     </>
-//   );
-// };
+  return (
+    <>
+      <div className="px-6 pt-6 md:hidden md:mb-0 block">
+        <SearchInput />
+      </div>
+      <div className="p-6 space-y-4">
+        c
+      </div>
+    </>
+  );
+};
 
-// export default SearchPage;
+export default SearchPage;
