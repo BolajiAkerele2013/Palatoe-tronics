@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { title } from "process";
 
 export const SearchInput = () => {
     const [value, setValue] = useState("")
@@ -26,8 +25,9 @@ export const SearchInput = () => {
                 title: debouncedValue,
             }
         }, { skipEmptyString: true, skipNull: true });
+    
         router.push(url);
-    }, [debouncedValue, currentCategoryId, router, pathname])
+    }, [debouncedValue, currentCategoryId, pathname, router]);
 
     return (
         <div className="relative">

@@ -1,3 +1,5 @@
+"use client";
+
 import { db } from "@/lib/db";
 import { Categories } from "./_components/categories";
 import { SearchInput } from "@/components/search-input";
@@ -10,19 +12,23 @@ interface SearchPageProps {
     searchParams: {
         title?: string;
         categoryId?: string;
-    };
-}
+    }
+};
 
 const SearchPage = async ({
     searchParams
 }: SearchPageProps) => {
     const { userId } = await auth();
 
+    // Redirect if no user is authenticated
     if (!userId) {
         return redirect("/");
     }
+
+    // Default searchParams in case they are undefined
     const { title = "", categoryId = "" } = searchParams || {};
 
+    // Fetch categories from the database
     const categories = await db.category.findMany({
         orderBy: {
             name: "asc"
@@ -32,8 +38,7 @@ const SearchPage = async ({
     // Fetch courses based on the searchParams and userId
     const courses = await GetCourses({
         userId,
-        title,
-        categoryId,
+        ...searchParams,
     });
 
     return (
