@@ -51,19 +51,4 @@ const SearchPage = async ({
     );
 };
 
-// Use the nextjs route params (if available) for the page
-export const getServerSideProps = async ({ query }: any) => {
-    // You can add any logic to handle searchParams here if needed
-    const { title, categoryId } = query; // extract from query string
-
-    return {
-        props: {
-            searchParams: {
-                title: title || "",
-                categoryId: categoryId || "",
-            },
-        },
-    };
-};
-
 export default SearchPage;
