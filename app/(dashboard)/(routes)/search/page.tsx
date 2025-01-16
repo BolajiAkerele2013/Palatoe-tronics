@@ -8,8 +8,8 @@ import { CoursesList } from "@/components/courses-list";
 
 interface SearchPageProps {
     searchParams: {
-        title: string;
-        categoryId: string;
+        title?: string;
+        categoryId?: string;
     };
 }
 
@@ -21,6 +21,7 @@ const SearchPage = async ({
     if (!userId) {
         return redirect("/");
     }
+    const { title = "", categoryId = "" } = searchParams || {};
 
     const categories = await db.category.findMany({
         orderBy: {
@@ -28,9 +29,11 @@ const SearchPage = async ({
         }
     });
 
+    // Fetch courses based on the searchParams and userId
     const courses = await GetCourses({
         userId,
-        ...searchParams,
+        title,
+        categoryId,
     });
 
     return (
@@ -40,12 +43,27 @@ const SearchPage = async ({
             </div>
             <div className="p-6 space-y-4">
                 <Categories 
-                items={categories} 
+                    items={categories} 
                 />
                 <CoursesList items={courses} />
             </div>
         </>
     );
+};
+
+// Use the nextjs route params (if available) for the page
+export const getServerSideProps = async ({ query }: any) => {
+    // You can add any logic to handle searchParams here if needed
+    const { title, categoryId } = query; // extract from query string
+
+    return {
+        props: {
+            searchParams: {
+                title: title || "",
+                categoryId: categoryId || "",
+            },
+        },
+    };
 };
 
 export default SearchPage;
