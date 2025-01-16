@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
+import { Suspense } from "react";
 //import { isTeacher } from "@/lib/teacher";
 
 export const NavbarRoutes = () => {
@@ -17,6 +18,7 @@ export const NavbarRoutes = () => {
     const isSearchPage = pathname === "/search";
 
     return (
+        <Suspense>
         <>
         {isSearchPage && (
             <div className="hidden md:block">
@@ -43,5 +45,6 @@ export const NavbarRoutes = () => {
             />
         </div>
         </>
+        </Suspense>
     )
 }
