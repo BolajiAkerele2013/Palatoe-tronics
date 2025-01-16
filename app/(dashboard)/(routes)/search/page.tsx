@@ -8,15 +8,16 @@ import { CoursesList } from "@/components/courses-list";
 import { Suspense } from "react";
 
 interface SearchPageProps {
-    searchParams?: {
-        title?: string;
-        categoryId?: string;
-    };
+    searchParams: Promise<{
+        title: string;
+        categoryId: string;
+    }>;
 }
 
 const SearchPage = async ({
-    searchParams = {},
+    searchParams,
 }: SearchPageProps) => {
+    const resolvedSearchParams = await Promise.resolve(searchParams);
     const { userId } = await auth();
 
     if (!userId) {
@@ -31,8 +32,7 @@ const SearchPage = async ({
 
     const courses = await GetCourses({
         userId,
-        title: searchParams.title || "",
-        categoryId: searchParams.categoryId || "",
+        ...resolvedSearchParams,
     });
 
     return (
