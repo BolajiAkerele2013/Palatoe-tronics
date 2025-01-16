@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
-import { isTeacher } from "@/lib/teacher";
+//import { isTeacher } from "@/lib/teacher";
 
 export const NavbarRoutes = () => {
-    const {userId} = useAuth();
+    //const {userId} = useAuth();
     const pathname = usePathname();
 
     const isTeacherPage = pathname?.startsWith("/teacher");
@@ -31,13 +31,13 @@ export const NavbarRoutes = () => {
                         Exit
                     </Button>
                 </Link>
-            ) : isTeacher(userId) ? (
+            ) : (
                 <Link href="/teacher/courses">
                     <Button size="sm" variant="ghost">
                         Teacher mode
                     </Button>
                 </Link>
-            ): null}
+            )}
             <UserButton 
             afterSignOutUrl="/"
             />
