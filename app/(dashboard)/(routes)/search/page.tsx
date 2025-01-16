@@ -1,5 +1,3 @@
-"use client";
-
 import { db } from "@/lib/db";
 import { Categories } from "./_components/categories";
 import { SearchInput } from "@/components/search-input";
