@@ -1,7 +1,7 @@
 import { Category, Course } from "@prisma/client";
 
 import { getProgress } from "@/actions/get-process";
-import { db } from "@/lib/db";
+import { db } from "@/lib/db"; 
 
 type CourseWithProgressWithCategory = Course & {
     category: Category | null;
@@ -18,14 +18,16 @@ type GetCourses = {
 
 export const GetCourses = async ({
     userId,
-    title = "",
-    categoryId,
+    title,
+    categoryId
 }: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
     try {
         const courses = await db.course.findMany({
             where: {
                 isPublished: true,
-                title: title ? { contains: title } : undefined,
+                title: {
+                    contains: title,
+                },
                 categoryId,
             },
             include: {
@@ -36,43 +38,43 @@ export const GetCourses = async ({
                     },
                     select: {
                         id: true,
-                    },
+                    }
                 },
                 purchases: {
                     where: {
                         userId,
-                    },
-                },
+                    }
+                }
             },
             orderBy: {
                 createdAt: "desc",
-            },
+            }
         });
 
-        // Return early if no courses found
-        if (!courses || courses.length === 0) {
-            return [];
-        }
-
-        // Map over courses and add progress information
         const CoursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
-            courses.map(async (course) => {
-                const progressPercentage =
-                    course.purchases.length > 0
-                        ? await getProgress(userId, course.id)
-                        : null;
+            courses.map(async course => {
+                if (course.purchases.length === 0) {
+                    return {
+                        ...course,
+                        progress: null,
+                    }
+                }
+
+                const progressPercentage = await getProgress(userId, course.id);
 
                 return {
                     ...course,
                     progress: progressPercentage,
-                };
+                }
+
             })
         );
 
         return CoursesWithProgress;
+
     } catch (error) {
-        console.error("[GET_COURSES]", error);
-        throw new Error("Failed to fetch courses");
+        console.log("[GET_COURSES]", error);
+        return [];
     }
 
 }
