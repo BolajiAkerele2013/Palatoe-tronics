@@ -7,10 +7,10 @@ import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
 
 interface SearchPageProps {
-    searchParams: {
+    searchParams: Promise<{
         title: string;
         categoryId: string;
-    }
+    }>
 }
 
 const SearchPage = async ({
