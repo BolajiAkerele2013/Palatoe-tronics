@@ -9,14 +9,14 @@ import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
 
 interface SearchPageProps {
-    searchParams: {
+    fSearchParams: {
         title?: string;
         categoryId?: string;
     }
 };
 
 const SearchPage = async ({
-    searchParams
+    fSearchParams
 }: SearchPageProps) => {
     const { userId } = await auth();
 
@@ -26,7 +26,7 @@ const SearchPage = async ({
     }
 
     // Default searchParams in case they are undefined
-    const { title = "", categoryId = "" } = searchParams || {};
+    const { title = "", categoryId = "" } = fSearchParams || {};
 
     // Fetch categories from the database
     const categories = await db.category.findMany({
@@ -38,7 +38,7 @@ const SearchPage = async ({
     // Fetch courses based on the searchParams and userId
     const courses = await GetCourses({
         userId,
-        ...searchParams,
+        ...fSearchParams,
     });
 
     return (
